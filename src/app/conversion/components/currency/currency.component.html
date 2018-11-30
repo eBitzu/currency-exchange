@@ -1,0 +1,46 @@
+<div class="mat-h1">I want to convert</div>
+<form [formGroup]="conversion" class="d-flex">
+  <mat-form-field class="mr-4">
+    <input matInput placeholder="Amount" type="number" (keyup)="updateResult($event)" formControlName="amount">
+  </mat-form-field>
+  <mat-form-field class="mr-4 w-25">
+    <mat-select placeholder="From" formControlName="fromCurrency" (selectionChange)="updateResult($event)">
+      <mat-option *ngFor="let rate of exchangeRates" [value]="rate.currency">
+        {{rate.currency}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div>
+    <button mat-raised-button class="p-0" type="button" (click)="switch()" [disabled]="!formEnabled">
+      <mat-icon color="primary">compare_arrows</mat-icon>
+    </button>
+  </div>
+  <mat-form-field class="mr-4 ml-4 w-25">
+    <mat-select placeholder="From" formControlName="toCurrency" (selectionChange)="updateResult($event)">
+      <mat-option *ngFor="let rate of exchangeRates" [value]="rate.currency">
+        {{rate.currency}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div>
+    <button mat-flat-button color="primary" type="button">
+      <span #conversionBtn>{{ formEnabled ? 'Convert': 'New' }} </span>
+    </button>
+  </div>
+</form>
+<div class="d-flex flex-column align-items-center">
+  <div>
+    <span class="mat-headline font-weight-light">
+      {{amount}} {{fromCurrency}} =
+    </span>
+    <span class="mat-headline accent font-weight-normal">
+      {{result}} {{ toCurrency }}
+    </span>
+  </div>
+  <div class="mat-body-1 font-weight-normal">
+    1 {{fromCurrency}} = {{oneFrom}} {{toCurrency}}
+  </div>
+  <div class="mat-body-1 font-weight-normal">
+    1 {{toCurrency}} = {{ oneTo }} {{fromCurrency}}
+  </div>
+</div>

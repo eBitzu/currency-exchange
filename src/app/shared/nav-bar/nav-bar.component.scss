@@ -1,0 +1,4 @@
+@import '../../../styles.scss';
+.mat-tab-label.active{
+  border-bottom: 2px solid mat-color($client-primary);
+}

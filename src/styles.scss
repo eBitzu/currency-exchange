@@ -1,0 +1,127 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$cl-light-green: (
+  50: #f1f8e9,
+  100: #dcedc8,
+  200: #c5e1a5,
+  300: #aed581,
+  400: #9ccc65,
+  500: #94c720,
+  600: #7cb342,
+  700: #689f38,
+  800: #558b2f,
+  900: #33691e,
+  A100: #ccff90,
+  A200: #b2ff59,
+  A400: #76ff03,
+  A700: #64dd17,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text
+  )
+);
+
+$cl-red: (
+  50: #ffebee,
+  100: #ffcdd2,
+  200: #ef9a9a,
+  300: #e57373,
+  400: #ef5350,
+  500: #c70d38,
+  600: #e53935,
+  700: #d32f2f,
+  800: #c62828,
+  900: #b71c1c,
+  A100: #ff8a80,
+  A200: #ff5252,
+  A400: #ff1744,
+  A700: #d50000,
+  contrast: (
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text
+  )
+);
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+$client-primary: mat-palette($mat-teal);
+$client-accent: mat-palette($cl-light-green);
+
+// The warn palette is optional (defaults to red).
+$client-warn: mat-palette($cl-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
+$cl-config: mat-typography-config(
+  $font-family: 'Roboto, monospace',
+  $headline: mat-typography-level(48px, 54px, 700),
+  $title: mat-typography-level(24px, 28px, 700),
+  $body-1: mat-typography-level(16px, 20px, 500)
+);
+@mixin extra-settings-theme() {
+  .extra-settings {
+    .mat-header-cell {
+      color: #8d8d8d;
+    }
+    color: #404040;
+  }
+}
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($client-theme);
+@include angular-material-typography($cl-config);
+@include extra-settings-theme();
+
+/* You can add global styles to this file, and also import other style files */
+.primary {
+  color: mat-color($client-primary);
+}
+.accent {
+  color: mat-color($client-accent);
+}
+
+.warn {
+  color: mat-color($client-warn);
+}
+
+.link{
+  cursor: pointer;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

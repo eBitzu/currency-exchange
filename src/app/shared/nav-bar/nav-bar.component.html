@@ -1,0 +1,17 @@
+<mat-tab-group ></mat-tab-group>
+<div class="mat-tab-header">
+  <div class="mat-tab-label-container container">
+    <app-logo></app-logo>
+    <div class="mat-tab-label"
+      [class.active]="tabIndex === 0"
+      (click)="tabClick(0)"
+    >Currency Converter</div>
+    <div class="mat-tab-label"
+      [class.active]="tabIndex === 1"
+      (click)="tabClick(1)"
+      >View Conversion History</div>
+    <div class="mat-tab-label">
+      <button *ngIf="lgnServ.isLoggedIn" mat-button color="primary" (click)="lgnServ.logOut()">Logout</button>
+    </div>
+  </div>
+</div>

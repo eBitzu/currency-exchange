@@ -1,0 +1,39 @@
+<div class="bg-light" *ngIf="!!stats">
+  <div class="container">
+  <div class="mat-h1">Conversion history</div>
+  <ng-template #noData>
+    <div class="mat-title font-weight-normal">No history found...</div>
+  </ng-template>
+  <table mat-table [dataSource]="stats" *ngIf="!!stats.length; else noData" class="mat-elevation-z3 w-100">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+      </ng-container>
+      <ng-container matColumnDef="event">
+        <th mat-header-cell *matHeaderCellDef>Event</th>
+        <td mat-cell *matCellDef="let element"> {{element.event}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element"  class="primary">
+            <div class="d-flex align-items-center link" (click)="viewItem(element)">
+              <mat-icon class="mat-18">remove_red_eye</mat-icon>
+              <span class="mat-body-1">View</span>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" class="warn">
+              <div class="d-flex align-items-center link" (click)="deleteItem(element)">
+                <mat-icon class="mat-18">delete_forever</mat-icon>
+                <span>Delete from history</span>
+              </div>
+            </td>
+          </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnDef"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnDef;"></tr>
+    </table>
+  </div>
+</div>

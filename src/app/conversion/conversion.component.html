@@ -1,0 +1,25 @@
+<div class="h-100 d-flex flex-column">
+  <app-nav-bar (tabChange)="tabChange($event)" [tabIndex]='tabIndex'></app-nav-bar>
+  <div class="bg-light flex-grow-1">
+    <div class="container mt-5">
+      <div [class.d-none]="tabIndex !== 0">
+        <app-currency
+          (converted)="prepareHistory($event)"
+          [transaction]="transactionToView"
+          [exchangeRates]="exchangeRates$ | async">
+        </app-currency>
+        <app-rates-history
+          [ratesHistory]="ratesHistory$ | async"
+          (periodChanged)="updatePeriod($event)"
+          *ngIf="historyEnabled"
+        >
+        </app-rates-history>
+      </div>
+      <app-history [class.d-none]="tabIndex !== 1"
+        (viewTransaction)="displayTransaction($event)"
+        (deleteTransaction)="deleteTransaction($event)"
+        [stats]="storageData">
+      </app-history>
+    </div>
+  </div>
+</div>
