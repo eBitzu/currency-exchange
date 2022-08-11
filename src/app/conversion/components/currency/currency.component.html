@@ -1,22 +1,20 @@
 <div class="mat-h1">I want to convert</div>
 <form [formGroup]="conversion" class="d-flex">
   <mat-form-field class="mr-4">
-    <input matInput placeholder="Amount" type="number" (keyup)="updateResult($event)" formControlName="amount">
+    <input matInput placeholder="Amount" type="number" (keyup)="updateResult()" formControlName="amount">
   </mat-form-field>
   <mat-form-field class="mr-4 w-25">
-    <mat-select placeholder="From" formControlName="fromCurrency" (selectionChange)="updateResult($event)">
+    <mat-select placeholder="From" formControlName="fromCurrency" (selectionChange)="updateResult()">
       <mat-option *ngFor="let rate of exchangeRates" [value]="rate.currency">
         {{rate.currency}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <div>
-    <button mat-raised-button class="p-0" type="button" (click)="switch()" [disabled]="!formEnabled">
-      <mat-icon color="primary">compare_arrows</mat-icon>
-    </button>
-  </div>
+  <button mat-icon-button class="p-0" type="button" (click)="switch()" [disabled]="!formEnabled">
+    <mat-icon color="primary">compare_arrows</mat-icon>
+  </button>
   <mat-form-field class="mr-4 ml-4 w-25">
-    <mat-select placeholder="From" formControlName="toCurrency" (selectionChange)="updateResult($event)">
+    <mat-select placeholder="From" formControlName="toCurrency" (selectionChange)="updateResult()">
       <mat-option *ngFor="let rate of exchangeRates" [value]="rate.currency">
         {{rate.currency}}
       </mat-option>

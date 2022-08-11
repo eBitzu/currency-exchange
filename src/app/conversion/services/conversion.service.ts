@@ -11,9 +11,9 @@ import { dateFormat } from 'src/app/shared/utils/formats';
 @Injectable()
 export class ConversionService {
   constructor(private http: HttpService) {}
-  url = environment.nomicsURL;
+  url = environment.exchangeURL;
   getExchangeRates(): Observable<ExchangeRate[]> {
-    return this.http.get('exchange-rates').pipe(
+    return this.http.get('currencies').pipe(
       map(data => data as ExchangeRate[]),
       catchError(() => of([]))
     );

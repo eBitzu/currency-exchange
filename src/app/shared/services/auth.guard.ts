@@ -4,7 +4,7 @@ import { LoginService } from './login.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(route, state) {
+  canActivate() {
     try {
       const user = sessionStorage.getItem('loggedUser');
       this.login.currentUser = user;

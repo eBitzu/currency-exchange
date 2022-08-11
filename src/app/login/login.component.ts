@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../shared/services/login.service';
 import { LoginError } from '../shared/models/shared.models';
@@ -9,14 +9,13 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   formSubmited = false;
   constructor(private lgnSrv: LoginService, private router: Router) {}
   login = new FormGroup({
     user: new FormControl('', [Validators.required, Validators.minLength(3)]),
     pass: new FormControl('', [Validators.required, Validators.minLength(3)])
   });
-  ngOnInit() {}
   get user(): string {
     return this.login.get('user').value;
   }
