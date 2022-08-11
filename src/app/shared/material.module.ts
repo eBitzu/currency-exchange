@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
-import {
-  MatTabsModule,
-  MatIconModule,
-  MatToolbarModule,
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule,
-  MatOptionModule,
-  MatDividerModule,
-  MatTableModule
-} from '@angular/material';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatIconModule} from '@angular/material/icon';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatTableModule} from '@angular/material/table';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   imports: [
@@ -20,7 +17,6 @@ import {
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatOptionModule,
     MatDividerModule,
     MatTableModule,
     MatInputModule
@@ -32,7 +28,6 @@ import {
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatOptionModule,
     MatDividerModule,
     MatTableModule,
     MatInputModule

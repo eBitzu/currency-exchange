@@ -1,6 +1,5 @@
 export const environment = {
   production: true,
-  nomicsKey: '', // should be changed
-  nomicsURL: 'https://api.nomics.com/v1',
+  exchangeURL: 'https://free.currconv.com/api/v7/',
   allowChanges: false,
 };

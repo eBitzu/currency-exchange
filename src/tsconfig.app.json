@@ -5,6 +5,13 @@
     "types": [],
     "allowSyntheticDefaultImports": true
   },
+  "files": [
+    "./main.ts",
+    "./polyfills.ts"
+  ],
+  "include": [
+    "**/*.d.ts"
+  ],
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

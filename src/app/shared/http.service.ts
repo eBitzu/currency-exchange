@@ -6,12 +6,11 @@ import { of } from 'rxjs';
 
 @Injectable()
 export class HttpService {
-  private nomicsKey = environment.nomicsKey;
-  private nomicsUrl = environment.nomicsURL;
-  get(url, params = {}, fullUrl = false) {
-    const sendURL = fullUrl ? url : `${this.nomicsUrl}/${url}`;
-    return this.http.get(sendURL, { params: { ...params, key: this.nomicsKey }}).pipe(
-      filter(data => !!data),
+  private exchangeUrl = environment.exchangeURL;
+  get(url: string, params = {}, fullUrl = false) {
+    const sendURL = fullUrl ? url : `${this.exchangeUrl}/${url}`;
+    return this.http.get(sendURL, { params: { ...params}}).pipe(
+      filter((data: any) => Array.isArray(data)),
       map((data: Array<object>) => data.map((el, i) => ({...el, key: i.toString()}))),
       catchError(err => of(err)),
     );

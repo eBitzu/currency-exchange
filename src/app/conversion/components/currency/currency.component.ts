@@ -29,34 +29,34 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.exchangeRates = [];
   }
   get amount(): number {
-    return this.conversion.get('amount').value;
+    return this.conversion.get('amount')?.value || 0;
   }
   get fromCurrency(): string {
-    return this.conversion.get('fromCurrency').value;
+    return this.conversion.get('fromCurrency')?.value || '';
   }
   get toCurrency(): string {
-    return this.conversion.get('toCurrency').value;
+    return this.conversion.get('toCurrency')?.value || '';
   }
   get result(): string {
     if (this.formEnabled && this.amount) {
       return this.unknownSymbol;
     }
-    return this.conversion.get('result').value;
+    return (this.conversion.get('result')?.value || 0).toString();
   }
   get oneFrom(): string {
     if (this.formEnabled) {
       return this.unknownSymbol;
     }
-    return this.conversion.get('oneFrom').value;
+    return (this.conversion.get('oneFrom')?.value || 0).toString();
   }
   get oneTo(): string {
     if (this.formEnabled) {
       return this.unknownSymbol;
     }
-    return this.conversion.get('oneTo').value;
+    return (this.conversion.get('oneTo')?.value || 0).toString();
   }
   @ViewChild('conversionBtn')
-  convertbtn: ElementRef<HTMLBaseElement>;
+  convertbtn: ElementRef<HTMLBaseElement> = null;
 
   @Input()
   exchangeRates: ExchangeRate[];
@@ -89,8 +89,8 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!!changes && changes.transaction) {
-      const tr: SimpleChange = changes.transaction;
+    if (!!changes && changes["transaction"]) {
+      const tr: SimpleChange = changes["transaction"];
       if (!!tr.currentValue) {
         this.conversion.patchValue(tr.currentValue);
         this.conversion.disable();
@@ -111,7 +111,7 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
         .subscribe(() => this.makeConversion());
     }
   }
-  updateResult(e?: number) {
+  updateResult() {
     if (!this.formEnabled || !environment.allowChanges) {
       return;
     }
