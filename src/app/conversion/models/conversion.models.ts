@@ -1,7 +1,6 @@
-export interface ExchangeRate {
+export type ExchangeRate = {
+  rate: number;
   currency: string;
-  rate: string;
-  timestamp: string;
   key: string;
 }
 

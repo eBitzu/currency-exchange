@@ -9,7 +9,7 @@ import {
   ExchangeTrans,
   StorageItem
 } from './models/conversion.models';
-import { filter, mergeMap, catchError } from 'rxjs/operators';
+import { filter, mergeMap, catchError, take } from 'rxjs/operators';
 import * as moment from 'moment';
 import { StorageService } from './services/storage.service';
 
@@ -31,8 +31,7 @@ export class ConversionComponent implements OnInit {
   }
   transactionToView: ExchangeTrans;
   storageData: StorageItem[] = [];
-  exchangeRates$: Observable<ExchangeRate[]>;
-  ratesHistory$: Observable<ExchangeRateHistory[]>;
+  exchangeRates:ExchangeRate[];
   historyEnabled = false;
   historyPeriod = 7;
   transactionInfo: ExchangeTrans = {
@@ -47,7 +46,11 @@ export class ConversionComponent implements OnInit {
   private _tabIndex = 0;
 
   ngOnInit() {
-    this.exchangeRates$ = this.cvService.getExchangeRates();
+    this.cvService.getExchangeRates().pipe(
+      take(1)
+    ).subscribe(data => {
+      this.exchangeRates = data;
+    })
     this.storageData = this.storage.currentStorage;
     this.transactionToView = null;
   }
@@ -57,13 +60,11 @@ export class ConversionComponent implements OnInit {
 
   updatePeriod(e: number) {
     this.historyPeriod = e;
-    this.getHistoryData();
   }
 
   prepareHistory(val: ExchangeEmit) {
     this.transactionInfo = val;
     this.saveToStorage(val);
-    this.getHistoryData();
     this.historyEnabled = !val.formEnabled;
   }
   displayTransaction(e: ExchangeTrans) {
@@ -74,43 +75,7 @@ export class ConversionComponent implements OnInit {
     this.storage.deleteItem(e);
     this.storageData = this.storage.currentStorage;
   }
-  private getHistoryData() {
-    const { fromCurrency, toCurrency } = this.transactionInfo;
-    const fromReq = this.cvService.getExchangeRatesHistory(
-      fromCurrency,
-      this.historyPeriod
-    );
-    const toReq = this.cvService.getExchangeRatesHistory(
-      toCurrency,
-      this.historyPeriod
-    );
-    this.ratesHistory$ = combineLatest(fromReq, toReq).pipe(
-      filter(([d1, d2]) => !!d1 && !!d2),
-      mergeMap(([d1, d2]) =>
-        of(
-          d1
-            .reduce(
-              (acc, { rate, timestamp }, ndx) => [
-                ...acc,
-                {
-                  timestamp: moment(timestamp).format('DD/MM/YYYY'),
-                  rate: this.calculateRate(rate, d2[ndx].rate)
-                }
-              ],
-              []
-            )
-            .reverse()
-        )
-      ),
-      catchError(() => of([]))
-    );
-  }
-  private calculateRate(r1: string, r2: string): string {
-    const temp1 = parseFloat(r1);
-    const temp2 = parseFloat(r2);
-    const result = Math.trunc((temp1 / temp2) * ratePrecision) / ratePrecision;
-    return result.toString();
-  }
+
   private saveToStorage(val: ExchangeTrans) {
     const { amount, fromCurrency, toCurrency } = val;
     const now = moment();

@@ -6,14 +6,8 @@
         <app-currency
           (converted)="prepareHistory($event)"
           [transaction]="transactionToView"
-          [exchangeRates]="exchangeRates$ | async">
+          [exchangeRates]="exchangeRates">
         </app-currency>
-        <app-rates-history
-          [ratesHistory]="ratesHistory$ | async"
-          (periodChanged)="updatePeriod($event)"
-          *ngIf="historyEnabled"
-        >
-        </app-rates-history>
       </div>
       <app-history [class.d-none]="tabIndex !== 1"
         (viewTransaction)="displayTransaction($event)"

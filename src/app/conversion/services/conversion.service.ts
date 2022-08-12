@@ -2,34 +2,22 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpService } from 'src/app/shared/http.service';
 import { Observable, of } from 'rxjs';
-import { ExchangeRate, ExchangeRateHistory } from '../models/conversion.models';
-import { map, catchError, share } from 'rxjs/operators';
-import * as moment from 'moment';
-import { dateFormat } from 'src/app/shared/utils/formats';
-
+import { ExchangeRate } from '../models/conversion.models';
+import { map, catchError} from 'rxjs/operators';
 
 @Injectable()
 export class ConversionService {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) { }
   url = environment.exchangeURL;
-  getExchangeRates(): Observable<ExchangeRate[]> {
-    return this.http.get('currencies').pipe(
-      map(data => data as ExchangeRate[]),
-      catchError(() => of([]))
-    );
-  }
-  getExchangeRatesHistory(
-    currency: string,
-    period: number,
-  ): Observable<ExchangeRateHistory[]> {
-    const [start, end] = this.calculateDates(period);
-    return this.http.get('exchange-rates/history', { currency, start, end }).pipe(
-      share(),
-    );
-  }
-  private calculateDates(period: number): string[] {
-    const start = moment().subtract(period, 'days').format(dateFormat);
-    const end = moment().format(dateFormat);
-    return [start, end];
-  }
+
+  getExchangeRates = (): Observable<ExchangeRate[]> => this.http.get('latest').pipe(
+    map((data) => data.rates),
+    map((data: Record<string, number>): Array<ExchangeRate> => {
+      return Object.keys(data).map(key => ({ key, rate: data[key], currency: key }))
+    }),
+    catchError((er) => {
+      console.warn(er);
+      return of([])
+    })
+  );
 }
