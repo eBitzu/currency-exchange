@@ -7,11 +7,9 @@ export function getConversions(
   fromRate: number,
   toRate: number
 ): number[] {
-  const inversedToRate = 1 / toRate;
-  const dolarAmount = amount * fromRate;
   return [
-    truncate(dolarAmount * inversedToRate),
-    truncate(fromRate * inversedToRate),
-    truncate(toRate / fromRate)
+    truncate((toRate / fromRate) * amount),
+    truncate(toRate / fromRate),
+    truncate(fromRate / toRate)
   ];
 }

@@ -5,22 +5,19 @@ import { LoginService } from './login.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
   canActivate() {
-    try {
-      const user = sessionStorage.getItem('loggedUser');
+    const user = sessionStorage.getItem('loggedUser');
+    if (user) {
       this.login.currentUser = user;
       this.login.isLoggedIn = true;
-      return true;
-    } catch (err) {
-      // nothing to do here
-    }
-    if (this.login.isLoggedIn) {
+
       return true;
     }
+
     this.router.navigate(['login']);
     return false;
   }
   constructor(
     private router: Router,
     private login: LoginService
-  ) {}
+  ) { }
 }

@@ -29,31 +29,31 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.exchangeRates = [];
   }
   get amount(): number {
-    return this.conversion.get('amount')?.value || 0;
+    return this.conversionForm.get('amount')?.value || 0;
   }
   get fromCurrency(): string {
-    return this.conversion.get('fromCurrency')?.value || '';
+    return this.conversionForm.get('fromCurrency')?.value || '';
   }
   get toCurrency(): string {
-    return this.conversion.get('toCurrency')?.value || '';
+    return this.conversionForm.get('toCurrency')?.value || '';
   }
   get result(): string {
     if (this.formEnabled && this.amount) {
       return this.unknownSymbol;
     }
-    return (this.conversion.get('result')?.value || 0).toString();
+    return (this.conversionForm.get('result')?.value || 0).toString();
   }
   get oneFrom(): string {
     if (this.formEnabled) {
       return this.unknownSymbol;
     }
-    return (this.conversion.get('oneFrom')?.value || 0).toString();
+    return (this.conversionForm.get('oneFrom')?.value || 0).toString();
   }
   get oneTo(): string {
     if (this.formEnabled) {
       return this.unknownSymbol;
     }
-    return (this.conversion.get('oneTo')?.value || 0).toString();
+    return (this.conversionForm.get('oneTo')?.value || 0).toString();
   }
   @ViewChild('conversionBtn')
   convertbtn: ElementRef<HTMLBaseElement> = null;
@@ -68,20 +68,19 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
   converted = new EventEmitter<ExchangeEmit>();
 
   unknownSymbol = '???';
-  conversion = new FormGroup({
-    amount: new FormControl(0, Validators.required),
-    fromCurrency: new FormControl('EUR'),
-    toCurrency: new FormControl('USD'),
+  conversionForm = new FormGroup({
+    amount: new FormControl(10, Validators.required),
+    fromCurrency: new FormControl('USD'),
+    toCurrency: new FormControl('EUR'),
     result: new FormControl(0),
     oneFrom: new FormControl(0),
     oneTo: new FormControl(0)
   });
   private btnSubscription: Subscription;
-  private getConversions = getConversions;
   switch() {
     const from = this.fromCurrency;
     const to = this.toCurrency;
-    this.conversion.patchValue({
+    this.conversionForm.patchValue({
       fromCurrency: to,
       toCurrency: from
     });
@@ -92,9 +91,9 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
     if (!!changes && changes["transaction"]) {
       const tr: SimpleChange = changes["transaction"];
       if (!!tr.currentValue) {
-        this.conversion.patchValue(tr.currentValue);
-        this.conversion.disable();
-        this.conversion.updateValueAndValidity();
+        this.conversionForm.patchValue(tr.currentValue);
+        this.conversionForm.disable();
+        this.conversionForm.updateValueAndValidity();
       }
     }
   }
@@ -118,11 +117,11 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
     this.convert();
   }
   get formEnabled() {
-    return this.conversion.enabled;
+    return this.conversionForm.enabled;
   }
   makeConversion() {
     if (this.formEnabled) {
-      this.conversion.disable();
+      this.conversionForm.disable();
       this.convert();
       this.converted.emit({
         fromCurrency: this.fromCurrency,
@@ -134,33 +133,28 @@ export class CurrencyComponent implements AfterViewInit, OnDestroy, OnChanges {
         formEnabled: this.formEnabled
       });
     } else {
-      this.conversion.enable();
+      this.conversionForm.enable();
     }
   }
 
   convert() {
-    const fromDolarRate = this.getRate(this.fromCurrency);
-    const toDolarRate = this.getRate(this.toCurrency);
-    const [result, oneFrom, oneTo] = this.getConversions(
+    const fromEuroRate = this.getRate(this.fromCurrency);
+    const toEuroRate = this.getRate(this.toCurrency);
+    const [result, oneFrom, oneTo] = getConversions(
       this.amount,
-      fromDolarRate,
-      toDolarRate
+      fromEuroRate,
+      toEuroRate
     );
-    this.conversion.patchValue({
+    this.conversionForm.patchValue({
       result,
       oneFrom,
       oneTo
     });
-    this.conversion.updateValueAndValidity();
+    this.conversionForm.updateValueAndValidity();
   }
   getRate(val: string): number {
-    const foundRate = this.exchangeRates.find(el => el.currency === val);
-    if (!foundRate || !foundRate.rate) {
-      return 1;
-    }
-    if (!parseFloat(foundRate.rate)) {
-      return 1;
-    }
-    return parseFloat(foundRate.rate);
+    const foundRate = this.exchangeRates.find(el => el.key === val);
+
+    return foundRate ? foundRate.rate : 1
   }
 }

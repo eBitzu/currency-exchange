@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  exchangeURL: 'https://free.currconv.com/api/v7',
+  exchangeURL: 'https://api.exchangerate.host',
   allowChanges: false,
 };
 
